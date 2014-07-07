@@ -1,0 +1,46 @@
+{
+  "name": "alarms-as-a-service",
+  "version": "1.0.0",
+  "description": "A web service built on top of reschedule.js, rrecur.js, and rrule.js for being notified when a one-time or repeat event is taking place.",
+  "main": "app.js",
+  "keywords": [
+    "appointment",
+    "periodic",
+    "schedule",
+    "reschedule",
+    "rrule",
+    "recur",
+    "alarm",
+    "clock",
+    "alarmclock",
+    "calendar",
+    "rrecur",
+    "recurring",
+    "icalevent",
+    "event",
+    "job",
+    "task",
+    "webhook"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/coolaj86/alarms-as-a-service.git"
+  },
+  "author": "AJ ONeal <awesome@coolaj86.com> (http://coolaj86.com)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/coolaj86/alarms-as-a-service/issues"
+  },
+  "homepage": "https://github.com/coolaj86/alarms-as-a-service",
+  "dependencies": {
+    "es6-promise": "^1.0.0",
+    "connect": "^3.0.1",
+    "request": "^2.37.0",
+    "reschedule": "^0.10.0",
+    "body-parser": "^1.4.3"
+  }
+}
