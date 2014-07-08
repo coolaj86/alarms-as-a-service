@@ -1,7 +1,10 @@
 alarms-as-a-service
 ===================
 
-A web service built on top of reschedule.js, rrecur.js, and rrule.js for being notified
+A web service built on top of [reschedule.js](https://github.com/coolaj86/node-reschedule),
+[rrecur.js](https://github.com/coolaj86/rrecurjs),
+and [rrule.js](https://github.com/jakubroztocil/rrule)
+for being notified
 when a one-time or repeat event is taking place.
 
 Current beta at http://alarms.beta.coolaj86.com
@@ -41,6 +44,9 @@ Only recurring events must specify `rrule`
   * `bysetpos` is something I don't understand, but it's supported by `rrule.js`
   * `wkst` which day the week starts on (i.e. `su` or `mo`)
 
+`apiKey` is not currently supported,
+but will be used in securing your webhooks against request forgery
+
 See [rrule.js](https://github.com/jakubroztocil/rrule#api) and the [RFC 2445 / RRULE](http://www.kanzaki.com/docs/ical/rrule.html) spec for more detail.
 
 ### Example Request to /api/alarms
@@ -67,6 +73,8 @@ See [rrule.js](https://github.com/jakubroztocil/rrule#api) and the [RFC 2445 / R
 , rrule: {
     freq: 'yearly'
   }
+
+, apiKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 }
 ```
 
@@ -198,3 +206,5 @@ TODO
 ====
 
 Should `next` show the snooze time or the original time?
+
+PrivateKey + Timestamp + Signature on webhooks
