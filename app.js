@@ -9,6 +9,7 @@ var connect = require('connect')
   , Reschedule
   , path = require('path')
   , Promise = require('es6-promise').Promise
+  , crypto = require('crypto')
   ;
 
 function addAlarm(req, res) {
@@ -89,16 +90,43 @@ module.exports = app
 module.exports.create = function (opts) {
   opts = opts || { filename: path.join(__dirname, "reschedule.sqlite3") };
 
+  function signRequest(payload) {
+    payload.timestamp = Date.now();
+    payload.token = crypto
+      .randomBytes(16)
+      .toString('hex')
+      ;
+
+    payload.signature = crypto
+      .createHmac('sha1', event.secret)
+      .update(new Buffer(payload.timestamp + payload.token, 'utf-8'))
+      .digest('hex')
+      ;
+
+    return payload;
+  }
+
   reschedule.create(opts).then(function (_Reschedule) {
     Reschedule = _Reschedule;
 
     Reschedule.on('appointment', function (event, details, done) {
       var hook = event.webhooks.occurrence
+        , payload
         ;
+
+      payload = {
+        uuid: details.appt.schedule.uuid
+      , next: details.next
+      , data: event.data
+      };
+
+      if (event.secret) {
+        signRequest(payload);
+      }
 
       request.post(
         { url: hook
-        , json: { uuid: details.appt.schedule.uuid, next: details.next, data: event.data }
+        , json: payload
         }
       , function (err, resp, body) {
           if (err) {
@@ -130,15 +158,25 @@ module.exports.create = function (opts) {
     Reschedule.on('unschedule', function (schedule) {
       var event = schedule.event
         , hook = event.webhooks.stop
+        , payload
         ;
 
       if (!hook) {
         return;
       }
 
+      payload = {
+        uuid: schedule.uuid
+      , data: event.data
+      };
+
+      if (event.secret) {
+        signRequest(payload);
+      }
+
       request.post(
         { url: hook
-        , json: { uuid: schedule.uuid, data: event.data }
+        , json: payload 
         }
       , function (err/*, resp, body*/) {
           if (err) {

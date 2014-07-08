@@ -44,8 +44,9 @@ Only recurring events must specify `rrule`
   * `bysetpos` is something I don't understand, but it's supported by `rrule.js`
   * `wkst` which day the week starts on (i.e. `su` or `mo`)
 
-`apiKey` is not currently supported,
-but will be used in securing your webhooks against request forgery
+Provide any hex string to `secret` and it will be used to secure your webhooks against request forgery
+(see [example](https://gist.github.com/coolaj86/81a3b61353d2f0a2552c)).
+Try `require('crypto').randomBytes(32).toString('hex')`.
 
 See [rrule.js](https://github.com/jakubroztocil/rrule#api) and the [RFC 2445 / RRULE](http://www.kanzaki.com/docs/ical/rrule.html) spec for more detail.
 
@@ -74,7 +75,7 @@ See [rrule.js](https://github.com/jakubroztocil/rrule#api) and the [RFC 2445 / R
     freq: 'yearly'
   }
 
-, apiKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+, secret: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 }
 ```
 
