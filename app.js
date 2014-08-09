@@ -6,7 +6,6 @@ var connect = require('connect')
   , app = connect()
   , reschedule = require('reschedule')
   , request = require('request')
-  , Reschedule
   , path = require('path')
   , Promise = require('es6-promise').Promise
   , crypto = require('crypto')
@@ -65,7 +64,7 @@ function removeAlarm(req, res) {
     , null, '  '));
   }
 
-  Reschedule.unschedule(uuid).then(function (schedule) {
+  reschedule.unschedule(uuid).then(function (schedule) {
     res.end(JSON.stringify(schedule, null, '  '));
   });
 }
@@ -106,10 +105,10 @@ module.exports.create = function (opts) {
     return payload;
   }
 
-  reschedule.create(opts).then(function (_Reschedule) {
-    Reschedule = _Reschedule;
+  reschedule.create(opts).then(function (_reschedule) {
+    reschedule = _reschedule;
 
-    Reschedule.on('appointment', function (event, details, done) {
+    reschedule.on('appointment', function (event, details, done) {
       var hook = event.webhooks.occurrence
         , payload
         ;
@@ -155,7 +154,7 @@ module.exports.create = function (opts) {
       );
     });
 
-    Reschedule.on('unschedule', function (schedule) {
+    reschedule.on('unschedule', function (schedule) {
       var event = schedule.event
         , hook = event.webhooks.stop
         , payload
